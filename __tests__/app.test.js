@@ -9,7 +9,7 @@ const app = require('../lib/app');
 
 describe('makes a test for a demo route', () => {
   beforeEach(() => {
-    return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
+    return pool.query(fs.readFileSync('../sql/setup.sql', 'utf-8'));
   });
 
   it('it allows the user to signup via POST', async() => {
