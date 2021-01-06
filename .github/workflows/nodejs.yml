@@ -22,3 +22,5 @@ jobs:
       env:
         CI: true
         DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+        SALT_ROUNDS: 4
+ 
