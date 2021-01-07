@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest --verbose --runInBand",
+    "start": "node -r dotenv/config server.js",
+    "start:watch": "nodemon -r dotenv/config server.js",
+    "test": "jest --verbose --runInBand --testLocationInResults --setupFiles dotenv/config",
     "test:watch": "npm run test -- --watch",
-    "start": "node server.js",
-    "start:watch": "nodemon server.js",
     "lint": "eslint .",
     "create-tables": "node data/create-tables.js",
     "drop-tables": "node data/drop-tables.js",
