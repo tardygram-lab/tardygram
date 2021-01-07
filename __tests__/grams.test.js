@@ -8,13 +8,24 @@ const User = require('../lib/models/User');
 describe('make a test for the gram routes', () => {
   //USER CREATED FOR TESTING
   let user;
+  let agent;
 
   beforeEach(async() => {
     await pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
     user = await User.insert ({
       email: 'test@test.com', password: 'password',   profilePhotoUrl: 'http://test.text.com'
     });
+
+    //USER LOGGED IN BEFORE TESTING
+    await agent
+      .post('/api/v1/auth/login')
+      .send({
+        email: 'test@test.com',
+        password: 'password',
+        profilePhotoUrl: 'http://test.text.com'
+      });
   });
+  
   afterAll(() => {
     return pool.end();
   });
@@ -33,6 +44,7 @@ describe('make a test for the gram routes', () => {
           tag2: 'tag2text'
         }] 
       })
+
       .then(res => {
         expect(res.body).toEqual({ 
           id: expect.any(String),

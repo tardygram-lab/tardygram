@@ -21,6 +21,5 @@ CREATE TABLE grams(
 --   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 --   user_id BIGINT REFERENCES users(id),
 --   grams_id BIGINT REFERENCES grams(id),
---   post TEXT NOT NULL,
 --   comment TEXT NOT NULL
 -- );
