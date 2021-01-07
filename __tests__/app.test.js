@@ -17,44 +17,50 @@ describe('makes a test for a demo route', () => {
   it('it allows the user to signup via POST', async() => {
     return request(app)
       .post('/api/v1/auth/signup')
-      .send({ email: 'test@test.com', password: 'password' })
+      .send({ email: 'test@test.com', password: 'password',   profilePhotoUrl: 'http://test.text.com' })
       .then(res => {
         expect(res.body).toEqual({ 
           id: expect.any(String),
-          email: 'test@test.com'
+          email: 'test@test.com',
+          profilePhotoUrl: 'http://test.text.com',
         });
       });
   });
   it('allows a user to login via POST', async() => {
     const user = await UserService.create({
       email: 'test@test.com',
-      password: 'password'
+      password: 'password',
+      profilePhotoUrl: 'http://test.text.com'
     });
 
     const res = await request(app)
       .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
-        password: 'password'
+        password: 'password',
+        profilePhotoUrl: 'http://test.text.com'
       });
 
     expect(res.body).toEqual({
       id: user.id,
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoUrl: 'http://test.text.com'
     });
   });
   it('verifies a user is logged in', async() => {
     const agent = request.agent(app);
     const user = await UserService.create({
       email: 'test@test.com',
-      password: 'password'
+      password: 'password',
+      profilePhotoUrl:'http://test.text.com'
     });
 
     await agent
       .post('/api/v1/auth/login')
       .send({
         email: 'test@test.com',
-        password: 'password'
+        password: 'password',
+        profilePhotoUrl: 'http://test.text.com'
       });
 
     const res = await agent
@@ -62,7 +68,8 @@ describe('makes a test for a demo route', () => {
 
     expect(res.body).toEqual({
       id: user.id,
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoUrl: 'http://test.text.com'
     });
   });
 
