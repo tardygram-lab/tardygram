@@ -8,12 +8,14 @@ const User = require('../lib/models/User');
 describe('make a test for the gram routes', () => {
   //USER CREATED FOR TESTING
   let user;
-  let agent;
+  let agent = request.agent(app);
 
   beforeEach(async() => {
     await pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
-    user = await User.insert ({
-      email: 'test@test.com', password: 'password',   profilePhotoUrl: 'http://test.text.com'
+    user = await UserService.create ({
+      email: 'test@test.com', 
+      password: 'password', 
+      profilePhotoUrl: 'http://test.text.com'
     });
 
     //USER LOGGED IN BEFORE TESTING
@@ -32,10 +34,9 @@ describe('make a test for the gram routes', () => {
 
   //POST TEST
   it('Allows user to POST a gram', async() => {
-    return request(app) 
-      .post('/api/vi/gram')
+    return agent 
+      .post('/api/v1/gram')
       .send({ 
-
         userId: user.id,
         photoUrl: 'http://test.text.com', 
         caption: 'caption example',
@@ -44,7 +45,6 @@ describe('make a test for the gram routes', () => {
           tag2: 'tag2text'
         }] 
       })
-
       .then(res => {
         expect(res.body).toEqual({ 
           id: expect.any(String),
