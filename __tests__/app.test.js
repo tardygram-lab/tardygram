@@ -9,9 +9,13 @@ const UserService = require('../lib/services/Userservice');
 
 //const client = require('../lib/client');
 
-describe('makes a test for a demo route', () => {
+describe.only('makes a test for a demo route', () => {
   beforeEach(() => {
     return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
+  });
+
+  afterAll(() => {
+    return pool.end();
   });
 
   it('it allows the user to signup via POST', async() => {
