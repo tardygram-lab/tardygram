@@ -59,6 +59,27 @@ describe('make a test for the gram routes', () => {
       });
       
   });
+  ////DELETE TEST    
 
+  it('removes a post', async() => {
+    const gram =
+     await agent 
+       .post('/api/v1/gram')
+       .send({ 
+         userId: user.id,
+         photoUrl: 'http://test.text.com', 
+         caption: 'caption example',
+         tags: [{
+           tag1: 'tag1text',
+           tag2: 'tag2text'
+         }] 
+       });
+      //  console.log(gram);
+    const res = await agent
+      .delete(`/api/v1/gram/${gram.body.id}`);
+  
+    expect(res.body).toEqual(gram.body);
+
+  });
 
 });
