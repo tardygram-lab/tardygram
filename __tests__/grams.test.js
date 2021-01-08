@@ -59,6 +59,7 @@ describe('make a test for the gram routes', () => {
       });
       
   });
+
   ////DELETE TEST    
 
   it('removes a post', async() => {
@@ -95,6 +96,7 @@ describe('make a test for the gram routes', () => {
           tag2: 'tag2text'
         }] 
       });
+
     const res = await agent
       .patch(`/api/v1/gram/${gram.body.id}`)
       .send({
@@ -116,4 +118,6 @@ describe('make a test for the gram routes', () => {
 
   });
 
+
 });
+
