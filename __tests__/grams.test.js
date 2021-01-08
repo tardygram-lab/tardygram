@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/Userservice');
 const User = require('../lib/models/User');
+const Comment = require('../lib/models/Comments');
 
 describe('make a test for the gram routes', () => {
   //USER CREATED FOR TESTING
@@ -43,7 +44,7 @@ describe('make a test for the gram routes', () => {
         tags: [{
           tag1: 'tag1text',
           tag2: 'tag2text'
-        }] 
+        }]
       })
       .then(res => {
         expect(res.body).toEqual({ 
@@ -113,11 +114,40 @@ describe('make a test for the gram routes', () => {
  
      
     });
-
-
-
   });
-
-
+  // FindBYId test
+  it.only('should find one gram by id, with comments', async() => {
+    const gram =
+    await agent 
+      .post('/api/v1/gram')
+      .send({ 
+        userId: user.id,
+        photoUrl: 'http://test.text.com', 
+        caption: 'caption example',
+        tags: [{
+          tag1: 'tag1text',
+          tag2: 'tag2text'
+        }] 
+      });
+      
+    await Promise.all([
+      { userId: '1', gramsId: '1', comment: 'my first comment' },
+      { userId: '1', gramsId: '1', comment: 'my 2nd comment' },
+      { userId: '1', gramsId: '1', comment: 'my 3rd comment' },
+      { userId: '1', gramsId: '1', comment: 'my 4th comment' }
+    ].map(comment => Comment.insert(comment)));
+    const res = await agent
+      .get(`/api/v1/gram/${gram.body.id}`);
+    expect(res.body).toEqual({
+      ...gram.body, comments: expect.arrayContaining([ 
+        { 'comment': 'my first comment', },
+        { 'comment': 'my 3rd comment', },
+        { 'comment': 'my 2nd comment', },
+        { 'comment': 'my 4th comment', }
+      ])
+    });      
+  });
+  //findTopTen test
+  
 });
 
