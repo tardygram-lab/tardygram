@@ -59,6 +59,32 @@ describe('make a test for the gram routes', () => {
       });
       
   });
-
-
+  //GET post
+  it('GETS all gram postings', async() => {
+    const req = await agent 
+      .post('/api/v1/gram')
+      .send({ 
+        userId: user.id,
+        photoUrl: 'http://test.text.com', 
+        caption: 'caption example',
+        tags: [{
+          tag1: 'tag1text',
+          tag2: 'tag2text'
+        }] 
+      });
+    const res = await request(app)
+      .get('/api/v1/gram');
+      
+    expect(res.body).toEqual([{ 
+      id: '1',
+      userId: user.id,
+      photoUrl: 'http://test.text.com', 
+      caption: 'caption example',
+      tags: [{
+        tag1: 'tag1text',
+        tag2: 'tag2text'
+      }] 
+    }]);
+  });
 });
+
