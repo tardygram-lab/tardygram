@@ -59,9 +59,33 @@ describe('make a test for the gram routes', () => {
       });
       
   });
-  //GET post
-  it('GETS all gram postings', async() => {
-    const req = await agent 
+
+  ////DELETE TEST    
+
+  it('removes a post', async() => {
+    const gramResponse =
+     await agent 
+       .post('/api/v1/gram')
+       .send({ 
+         userId: user.id,
+         photoUrl: 'http://test.text.com', 
+         caption: 'caption example',
+         tags: [{
+           tag1: 'tag1text',
+           tag2: 'tag2text'
+         }] 
+       });
+      //  console.log(gram);
+    const res = await agent
+      .delete(`/api/v1/gram/${gramResponse.body.id}`);
+  
+    expect(res.body).toEqual(gramResponse.body);
+
+  });
+  //////////////////UPDATES GRams
+  it('updates via patch', async() => {
+    const gram =
+    await agent 
       .post('/api/v1/gram')
       .send({ 
         userId: user.id,
@@ -72,19 +96,28 @@ describe('make a test for the gram routes', () => {
           tag2: 'tag2text'
         }] 
       });
-    const res = await request(app)
-      .get('/api/v1/gram');
+
+    const res = await agent
+      .patch(`/api/v1/gram/${gram.body.id}`)
+      .send({
+   
+        caption: 'caption update',
+   
       
-    expect(res.body).toEqual([{ 
+      });
+      // console.log(...gram);
+    expect(res.body).toEqual({ ...gram.body,
+
       id: '1',
-      userId: user.id,
-      photoUrl: 'http://test.text.com', 
-      caption: 'caption example',
-      tags: [{
-        tag1: 'tag1text',
-        tag2: 'tag2text'
-      }] 
-    }]);
+      caption: 'caption update',
+ 
+     
+    });
+
+
+
   });
+
+
 });
 
