@@ -39,7 +39,7 @@ describe('make a test for the gram routes', () => {
           tag1: 'tag1text',
           tag2: 'tag2text'
         }]
-      })
+      });
   });
   
   afterAll(() => {
@@ -64,5 +64,18 @@ describe('make a test for the gram routes', () => {
       });
   });
 
+  it('will delete a darn comment', async() => {
   
+    const commentResponse = await agent 
+      .post('/api/v1/comment')
+      .send({ 
+        userId: '1', 
+        gramsId: '1', 
+        comment: 'my first comment' 
+      });
+    const res = await agent
+      .delete(`/api/v1/comment/${commentResponse.body.id}`);
+    
+    expect(res.body).toEqual(commentResponse.body);   
+  });
 });
