@@ -23,3 +23,5 @@ CREATE TABLE comments(
   grams_id BIGINT REFERENCES grams(id),
   comment TEXT NOT NULL
 );
+
+
