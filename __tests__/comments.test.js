@@ -3,9 +3,6 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/Userservice');
-const User = require('../lib/models/User');
-const Comment = require('../lib/models/Comments');
-const Gram = require('../lib/models/Gram');
 
 describe('make a test for the gram routes', () => {
   //USER CREATED FOR TESTING
@@ -19,7 +16,6 @@ describe('make a test for the gram routes', () => {
       password: 'password', 
       profilePhotoUrl: 'http://test.text.com'
     });
-
     //USER LOGGED IN BEFORE TESTING
     await agent
       .post('/api/v1/auth/login')
@@ -28,7 +24,6 @@ describe('make a test for the gram routes', () => {
         password: 'password',
         profilePhotoUrl: 'http://test.text.com'
       });
-
     await agent 
       .post('/api/v1/gram')
       .send({ 
@@ -41,11 +36,10 @@ describe('make a test for the gram routes', () => {
         }]
       });
   });
-  
   afterAll(() => {
     return pool.end();
   });
-
+  ///////POST COMMENT
   it('Allows user to POST a comment', async() => {
     return agent 
       .post('/api/v1/comment')
@@ -63,9 +57,8 @@ describe('make a test for the gram routes', () => {
         });
       });
   });
-
+  /////////DELETE COMMENT
   it('will delete a darn comment', async() => {
-  
     const commentResponse = await agent 
       .post('/api/v1/comment')
       .send({ 
@@ -75,7 +68,6 @@ describe('make a test for the gram routes', () => {
       });
     const res = await agent
       .delete(`/api/v1/comment/${commentResponse.body.id}`);
-    
     expect(res.body).toEqual(commentResponse.body);   
   });
 });
