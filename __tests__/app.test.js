@@ -7,8 +7,6 @@ const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/Userservice');
 
-//const client = require('../lib/client');
-
 describe.only('makes a test for a demo route', () => {
   beforeEach(() => {
     return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
@@ -17,7 +15,7 @@ describe.only('makes a test for a demo route', () => {
   afterAll(() => {
     return pool.end();
   });
-
+  ////////SIGN UP
   it('it allows the user to signup via POST', async() => {
     return request(app)
       .post('/api/v1/auth/signup')
@@ -30,13 +28,13 @@ describe.only('makes a test for a demo route', () => {
         });
       });
   });
+  ///////SIGN IN
   it('allows a user to login via POST', async() => {
     const user = await UserService.create({
       email: 'test@test.com',
       password: 'password',
       profilePhotoUrl: 'http://test.text.com'
     });
-
     const res = await request(app)
       .post('/api/v1/auth/login')
       .send({
@@ -44,13 +42,13 @@ describe.only('makes a test for a demo route', () => {
         password: 'password',
         profilePhotoUrl: 'http://test.text.com'
       });
-
     expect(res.body).toEqual({
       id: user.id,
       email: 'test@test.com',
       profilePhotoUrl: 'http://test.text.com'
     });
   });
+  /////////VERIFY'S
   it('verifies a user is logged in', async() => {
     const agent = request.agent(app);
     const user = await UserService.create({
@@ -58,7 +56,6 @@ describe.only('makes a test for a demo route', () => {
       password: 'password',
       profilePhotoUrl:'http://test.text.com'
     });
-
     await agent
       .post('/api/v1/auth/login')
       .send({
@@ -66,15 +63,12 @@ describe.only('makes a test for a demo route', () => {
         password: 'password',
         profilePhotoUrl: 'http://test.text.com'
       });
-
     const res = await agent
       .get('/api/v1/auth/verify');
-
     expect(res.body).toEqual({
       id: user.id,
       email: 'test@test.com',
       profilePhotoUrl: 'http://test.text.com'
     });
   });
-
 });

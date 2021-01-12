@@ -3,9 +3,7 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/Userservice');
-const User = require('../lib/models/User');
 const Comment = require('../lib/models/Comments');
-const Gram = require('../lib/models/Gram');
 
 describe('make a test for the gram routes', () => {
   //USER CREATED FOR TESTING
@@ -19,7 +17,6 @@ describe('make a test for the gram routes', () => {
       password: 'password', 
       profilePhotoUrl: 'http://test.text.com'
     });
-
     //USER LOGGED IN BEFORE TESTING
     await agent
       .post('/api/v1/auth/login')
@@ -33,7 +30,6 @@ describe('make a test for the gram routes', () => {
   afterAll(() => {
     return pool.end();
   });
-
   //POST TEST
   it('Allows user to POST a gram', async() => {
     return agent 
@@ -59,11 +55,8 @@ describe('make a test for the gram routes', () => {
           }] 
         });
       });
-      
   });
-
   ////DELETE TEST    
-
   it('removes a post', async() => {
     const gramResponse =
      await agent 
@@ -77,12 +70,9 @@ describe('make a test for the gram routes', () => {
            tag2: 'tag2text'
          }] 
        });
-      //  console.log(gram);
     const res = await agent
       .delete(`/api/v1/gram/${gramResponse.body.id}`);
-  
     expect(res.body).toEqual(gramResponse.body);
-
   });
   //////////////////UPDATES GRams
   it('updates via patch', async() => {
@@ -98,22 +88,14 @@ describe('make a test for the gram routes', () => {
           tag2: 'tag2text'
         }] 
       });
-
     const res = await agent
       .patch(`/api/v1/gram/${gram.body.id}`)
       .send({
-   
         caption: 'caption update',
-   
-      
       });
-      // console.log(...gram);
     expect(res.body).toEqual({ ...gram.body,
-
       id: '1',
       caption: 'caption update',
- 
-     
     });
   });
   // FindBYId test
@@ -130,7 +112,6 @@ describe('make a test for the gram routes', () => {
           tag2: 'tag2text'
         }] 
       });
-      
     await Promise.all([
       { userId: '1', gramsId: '1', comment: 'my first comment' },
       { userId: '1', gramsId: '1', comment: 'my 2nd comment' },
@@ -153,13 +134,9 @@ describe('make a test for the gram routes', () => {
     await pool.query(fs.readFileSync('./sql/test.sql', 'utf-8'));
 
     const res = await request(app)
-    .get('/api/v1/gram/topTen');
+      .get('/api/v1/gram/topTen');
 
     expect(res.body).toEqual(require ('../data/expected.json'));
-    
-
-
-    
   });
 });
 

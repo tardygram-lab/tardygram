@@ -20,7 +20,7 @@ CREATE TABLE grams(
 CREATE TABLE comments(
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   user_id BIGINT REFERENCES users(id),
-  grams_id BIGINT REFERENCES grams(id),
+  grams_id BIGINT REFERENCES grams(id) ON DELETE CASCADE,
   comment TEXT NOT NULL
 );
 
