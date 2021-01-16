@@ -3,6 +3,7 @@ const pool = require('../lib/utils/pool');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/Userservice');
+const Comment = require('../lib/models/Comments');
 
 describe('make a test for the gram routes', () => {
   //USER CREATED FOR TESTING
@@ -58,16 +59,18 @@ describe('make a test for the gram routes', () => {
       });
   });
   /////////DELETE COMMENT
-  it('will delete a darn comment', async() => {
-    const commentResponse = await agent 
-      .post('/api/v1/comment')
-      .send({ 
-        userId: '1', 
-        gramsId: '1', 
-        comment: 'my first comment' 
-      });
+  it('should delete a comment on an exsisting gram via DELETE', async() => {
+    const comment = await Comment.insert({   userId: '1', 
+      gramsId: '1', 
+      comment: 'my first comment' });
     const res = await agent
-      .delete(`/api/v1/comment/${commentResponse.body.id}`);
-    expect(res.body).toEqual(commentResponse.body);   
+      .delete(`/api/v1/comment/${comment.id}`);
+    expect(res.body).toEqual({ 
+      id: expect.any(String),
+      userId: '1', 
+      gramsId: '1', 
+      comment: 'my first comment'  
+    });
   });
-});
+})
+;
